@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta name=”viewport” content=”width=device-width,initial-scale=1.0″>
+    <meta charset="UTF-8">
+    <title>UPLODAER</title>
+    <!-- <link rel="stylesheet" href="index.css"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0% 0%;
+            background-color: rgb(230, 230, 230);
+        }
+
+
+        /* スマート　囲み枠　2 */
+        .kakomi-smart2 {
+
+            display: inline-block;
+            position: relative;
+            margin: 2em auto;
+            padding: 3em 1em .8em;
+            width: 90%;
+            /* ボックス幅 */
+            border-style: solid;
+            border-width: 5px 0 0 0;
+            border-color: #907b6e;
+            /* 枠の色 */
+            background-color: #ede4cd;
+            /* 背景色 */
+            color: #666;
+            /* テキスト色 */
+            box-shadow: 0 0 3px #999;
+            /* 影の色 */
+        }
+
+        .title-smart2 {
+            display: inline-block;
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            background-color: #ede4cd;
+            /* タイトル背景色 */
+            color: #907b6e;
+            /* タイトル色 */
+            font-size: 1.1em;
+            font-weight: bold;
+            border-style: none none double;
+            border-color: #907b6e;
+            /*タイトル下線 */
+            border-width: 3px;
+        }
+
+
+
+
+        .flex {
+            margin-left: 0%;
+            margin-right: 0%;
+            display: block;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            /* background-color: rgb(153, 24, 24); */
+
+        }
+
+        .logo {
+            position: relative;
+            top: -30px;
+            margin-left: 0%;
+            margin-right: 0%;
+            margin-top: 0px;
+
+            display: block;
+            text-align: left;
+            font-size: 6em;
+            /* background-color: rgb(153, 24, 24); */
+            font-family: 'Caveat', cursive;
+            color: rgb(255, 255, 255);
+            /* background-color: coral; */
+
+        }
+
+        .banner {
+            /* margin: 10px auto; */
+            display: block;
+            width: 100%;
+            height: 100px;
+            /* background-color: rgb(0, 0, 0); */
+            background: -moz-linear-gradient(top, #000000, 90%, #FFF);
+            background: -webkit-linear-gradient(top, #000000, 90%, #FFF);
+            background: linear-gradient(to bottom, #000000, 90%, #FFF);
+
+        }
+
+        .obj {
+
+            margin: 10px auto;
+            display: inline-block;
+            text-align: center;
+            width: 80%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.951);
+            border: 4px solid #000;
+            padding: 10px 10px;
+            border-radius: 20px;
+        }
+
+        .form {
+            margin: 10px auto;
+            text-align: center;
+            width: 70%;
+            height: 100%;
+            color: aqua;
+            position: relative;
+            display: inline-block;
+            /* background-color: darkorchid; */
+            /* margin: 10px 10px; */
+
+        }
+
+        .title {
+            font-size: 2em;
+            position: relative;
+            right: 25%;
+            top: 20%;
+            margin-top: 1%;
+            color: #505050;
+            /*文字色*/
+            padding: 0.3em;
+            /*文字周りの余白*/
+            display: inline-block;
+            /*おまじない*/
+            line-height: 1.3;
+            /*行高*/
+            background: #dbebf8;
+            /*背景色*/
+            vertical-align: middle;
+            border-radius: 25px 0px 0px 25px;
+            /*左側の角を丸く*/
+
+
+
+        }
+
+        .title:before {
+            content: '●';
+            color: white;
+            margin-right: 8px;
+        }
+
+        /*下線*/
+        .formframe {
+            display: inline;
+            margin: 10px auto;
+            position: relative;
+            display: flex;
+            width: 80%;
+            height: 150%;
+            background-color: black;
+            border-radius: 20px;
+        }
+    </style>
+
+    <script>
+        window.addEventListener('load', () => {
+
+            function copyTextToClipboard(textVal) {
+                // テキストエリアを用意する
+                const copyFrom = document.createElement("textarea");
+                // テキストエリアへ値をセット
+                copyFrom.textContent = textVal;
+
+                // bodyタグの要素を取得
+                const bodyElm = document.getElementsByTagName("body")[0];
+                // 子要素にテキストエリアを配置
+                bodyElm.appendChild(copyFrom);
+
+                // テキストエリアの値を選択
+                copyFrom.select();
+                // コピーコマンド発行
+                const retVal = document.execCommand('copy');
+                // 追加テキストエリアを削除
+                bodyElm.removeChild(copyFrom);
+                // 処理結果を返却
+                return retVal;
+            }
+
+            const submitButton = document.querySelector('.submit_btn')
+            submitButton.addEventListener('click', async () => {
+                const links = document.querySelector(".links");
+                const anker2 = document.createElement('b');
+                anker2.textContent = "送信中...";
+                anker2.target = "_blank";
+                links.appendChild(anker2);
+
+
+                event.stopPropagation();
+                event.preventDefault();
+                const form = document.querySelector('.form');
+                const formData = new FormData(form);
+                const fetchData = await fetch('./file_upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const anker = document.createElement('a');
+                const resURL = await fetchData.text();
+                anker.href = resURL;
+                anker.textContent = resURL;//送信完了!
+                anker.target = "_blank";
+                links.appendChild(anker);
+                const copyButton = document.createElement('button');
+                copyButton.textContent = "左のURLをコピーする";
+                copyButton.addEventListener('click', () => {
+                    // Navigator.clipboard.writeText(resURL);
+                    copyTextToClipboard(resURL);
+                });
+
+                const brTag = document.createElement('br');
+
+
+
+                links.appendChild(copyButton);
+                links.appendChild(brTag);
+            })
+        })
+    </script>
+
+</head>
+
+<body>
+    <span class="flex">
+        <span class="banner">
+            <span class="logo">suke_presents</span>
+        </span>
+        <span class="obj">
+            <Span class="hoge">
+                <h1 class="title">体育祭用うPろだ</h1>
+
+                <div class="kakomi-smart2">
+                    <span class="title-smart2">Information</span>
+                    <p style="font-size: 1.5em;">画像の共有にどうぞ</p>
+                    <p style="font-size: 1.5em;">他のところで採用してくれないかなぁこれ...</p>
+                </div>
+            </Span>
+            <span class="formframe">
+                <form class="form">
+                    <input class="img_input" type="file" name="file">
+                    <button class="submit_btn">送信ボタン</button>
+                </form>
+            </span>
+            <div class="links"></div>
+        </span>
+    </span>
+</body>
+
+</html>
